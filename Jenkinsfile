@@ -4,32 +4,26 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                script {
-                    // Compile the .cpp file using shell script
-                    sh 'g++ -o output working.cpp'
-                }
+                sh 'g++ -o PES2UG21CS277-1 working.cpp'
             }
         }
         
         stage('Test') {
             steps {
-                script {
-                    // Print the output of the .cpp file using shell script
-                    sh './output'
-                }
+                sh './PES2UG21CS277-1'
             }
         }
         
         stage('Deploy') {
             steps {
-                // Add deployment steps here if needed
+                // Placeholder step for Deploy
+                echo 'Deploying...'
             }
         }
     }
     
     post {
         always {
-            // Display 'pipeline failed' in case of any errors within the pipeline
             echo 'Pipeline failed'
         }
     }
