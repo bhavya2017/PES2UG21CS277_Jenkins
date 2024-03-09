@@ -4,25 +4,41 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'mvn clean install'
-                echo 'Build Stage Successful'
+                script {
+                    def mvnHome = tool 'Maven'
+                    if (mvnHome) {
+                        sh "${mvnHome}/bin/mvn clean install"
+                        echo 'Build Stage Successful'
+                    } else {
+                        error 'Maven not configured properly. Please check Maven installation in Jenkins configuration.'
+                    }
+                }
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
-                echo 'Test Stage Successful'
-                post {
-                    always {
-                        junit 'target/surefire-reports/*.xml'
+                script {
+                    def mvnHome = tool 'Maven'
+                    if (mvnHome) {
+                        sh "${mvnHome}/bin/mvn test"
+                        echo 'Test Stage Successful'
+                    } else {
+                        error 'Maven not configured properly. Please check Maven installation in Jenkins configuration.'
                     }
                 }
             }
         }
         stage('Deploy') {
             steps {
-                sh 'mvn deploy'
-                echo 'Deployment Successful'
+                script {
+                    def mvnHome = tool 'Maven'
+                    if (mvnHome) {
+                        sh "${mvnHome}/bin/mvn deploy"
+                        echo 'Deployment Successful'
+                    } else {
+                        error 'Maven not configured properly. Please check Maven installation in Jenkins configuration.'
+                    }
+                }
             }
         }
     }
