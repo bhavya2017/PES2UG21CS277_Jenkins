@@ -1,36 +1,35 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven' // 'Maven' should match the name you configured in Jenkins
-    }
-
     stages {
         stage('Build') {
             steps {
                 script {
-                    sh 'mvn clean install' // Use 'mvn' command directly, Jenkins will automatically use the configured Maven version
+                    // Compile the .cpp file using a shell script
+                    sh 'g++ -o output working.cpp'
                 }
             }
         }
+        
         stage('Test') {
             steps {
                 script {
-                    sh 'mvn test' // Use 'mvn test' command for testing
+                    // Print the output of the .cpp file using a shell script
+                    sh './output'
                 }
             }
         }
+        
         stage('Deploy') {
             steps {
-                script {
-                    sh 'mvn deploy' // Use 'mvn deploy' command for deployment
-                }
+                // Add deployment steps here if needed
             }
         }
     }
 
     post {
-        failure {
+        always {
+            // Display "pipeline failed" in case of any errors within the pipeline
             echo 'Pipeline failed'
         }
     }
