@@ -1,43 +1,29 @@
-pipeline {
+\pipeline {
     agent any
+
+    tools {
+        maven 'Maven' // 'Maven' should match the name you configured in Jenkins
+    }
 
     stages {
         stage('Build') {
             steps {
                 script {
-                    def mvnHome = tool 'Maven'
-                    if (mvnHome) {
-                        sh "cd 'C:/Program Files/Java/apache-maven-3.9.6-bin' && ${mvnHome}/bin/mvn clean install"
-                        echo 'Build Stage Successful'
-                    } else {
-                        error 'Maven not configured properly. Please check Maven installation in Jenkins configuration.'
-                    }
+                    sh 'mvn clean install' // Use 'mvn' command directly, Jenkins will automatically use the configured Maven version
                 }
             }
         }
         stage('Test') {
             steps {
                 script {
-                    def mvnHome = tool 'Maven'
-                    if (mvnHome) {
-                        sh "cd 'C:/Program Files/Java/apache-maven-3.9.6-bin' && ${mvnHome}/bin/mvn test"
-                        echo 'Test Stage Successful'
-                    } else {
-                        error 'Maven not configured properly. Please check Maven installation in Jenkins configuration.'
-                    }
+                    sh 'mvn test' // Use 'mvn test' command for testing
                 }
             }
         }
         stage('Deploy') {
             steps {
                 script {
-                    def mvnHome = tool 'Maven'
-                    if (mvnHome) {
-                        sh "cd 'C:/Program Files/Java/apache-maven-3.9.6-bin' && ${mvnHome}/bin/mvn deploy"
-                        echo 'Deployment Successful'
-                    } else {
-                        error 'Maven not configured properly. Please check Maven installation in Jenkins configuration.'
-                    }
+                    sh 'mvn deploy' // Use 'mvn deploy' command for deployment
                 }
             }
         }
