@@ -1,30 +1,28 @@
 pipeline {
     agent any
-    
+
     stages {
         stage('Build') {
             steps {
-                sh 'g++ -o PES2UG21CS277-1 working.cpp'
+                sh 'g++ working.cpp -o PES2UG21CS277-1' // Compile working.cpp and output PES2UG21CS277-1
             }
         }
-        
         stage('Test') {
             steps {
-                sh './PES2UG21CS277-1'
+                sh './PES2UG21CS277-1' // Execute PES2UG21CS277-1 binary
             }
         }
-        
         stage('Deploy') {
+            // Add your deployment commands here (e.g., copy to server)
             steps {
-                // Placeholder step for Deploy
-                echo 'Deploying...'
+                scp PES2UG21CS277-1 user@server:destination/
             }
         }
     }
-    
+
     post {
-        always {
-            echo 'Pipeline failed'
+        failure {
+            echo 'Pipeline Failed!'
         }
     }
 }
