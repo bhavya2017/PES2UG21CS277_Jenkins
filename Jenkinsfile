@@ -1,28 +1,28 @@
-pipeline {
-    agent any
-
-    stages {
-        stage('Build') {
+pipeline{
+  agent any
+  stages {
+          stage('Clone repository'){
             steps {
-                sh 'g++ working.cpp -o PES2UG21CS277-1' // Compile working.cpp and output PES2UG21CS277-1
+              checkout([$class: 'GitSCM',
+              branches: [[name: '*/main']],
+              userRemoteConfigs: [[url: 'https://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@github.com/bhavya2017/PES2UG21CS277_Jenkins']]])
             }
-        }
-        stage('Test') {
-            steps {
-                sh './PES2UG21CS277-1' // Execute PES2UG21CS277-1 binary
-            }
-        }
-        stage('Deploy') {
-            // Add your deployment commands here (e.g., copy to server)
-            steps {
-                scp PES2UG21CS277-1 user@server:destination/
-            }
+          }
+    stage('Build'){
+        steps {
+          build 'PES2UG21CS277-1'
+          sh 'g++ sample.cpp -o output'
         }
     }
-
-    post {
-        failure {
-            echo 'Pipeline Failed!'
+    stage('Deploy') {
+        steps {
+            echo 'deploy'
         }
     }
+}
+post{
+  failure{
+    error 'Pipeline failed'
+  }
+}
 }
